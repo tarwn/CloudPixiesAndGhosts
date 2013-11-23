@@ -70,16 +70,16 @@ echo Handling .NET Web Application deployment.
 
 :: 1. Restore NuGet packages
 echo 1: Restore NuGet packages
-IF NOT DEFINED NUGET_EXE (
-  echo Missing nuget.exe path, checking for local executable
-  IF EXIST "%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe" (
-     echo Missing nuget.exe path, using local executable from package restore
-	 SET NUGET_EXE="%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe"
-  ) ELSE (
-    echo Missing nuget.exe path and package restore not set, cannot continue
-    goto error
-  )
-)
+::IF NOT DEFINED NUGET_EXE (
+::  echo Missing nuget.exe path, checking for local executable
+::  IF EXIST "%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe" (
+::     echo Missing nuget.exe path, using local executable from package restore
+::	 SET NUGET_EXE="%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe"
+::  ) ELSE (
+::    echo Missing nuget.exe path and package restore not set, cannot continue
+::    goto error
+::  )
+::)
 
 IF /I "CloudPixiesAndGhosts.sln" NEQ "" (
   echo - Nuget Package Restore using Nuget.exe located at: %NUGET_EXE%
