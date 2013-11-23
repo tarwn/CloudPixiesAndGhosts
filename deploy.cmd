@@ -20,7 +20,7 @@ IF %ERRORLEVEL% NEQ 0 (
 
 setlocal enabledelayedexpansion
 
-SET ARTIFACTS=%~dp0%..\artifacts
+SET ARTIFACTS=%~dp0%artifacts
 
 IF NOT DEFINED DEPLOYMENT_SOURCE (
   SET DEPLOYMENT_SOURCE=%~dp0%.
@@ -70,8 +70,13 @@ echo Handling .NET Web Application deployment.
 
 :: 1. Restore NuGet packages
 IF NOT DEFINED NUGET_EXE (
-  echo Missing nuget.exe path, cannot continue
-  goto error
+  IF EXIST "%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe" (
+     echo "Missing nuget.exe path, using local executable from pakacge restore
+	 SET NUGET_EXE=%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe
+  ) ELSE (
+    echo Missing nuget.exe path and package restore not set, cannot continue
+    goto error
+  )
 )
 
 IF /I "CloudPixiesAndGhosts.sln" NEQ "" (

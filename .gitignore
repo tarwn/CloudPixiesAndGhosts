@@ -66,3 +66,6 @@ packages/
 
 #Test files
 *.testsettings
+
+# kudu deploy artifacts w/ custom path to solution level
+artifacts/
