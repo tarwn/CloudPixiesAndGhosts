@@ -69,7 +69,7 @@ IF NOT DEFINED MSBUILD_PATH (
 echo Handling .NET Web Application deployment.
 
 :: 1. Restore NuGet packages
-echo 1: Restore NuGet packages
+echo 1: Skipping Restore NuGet packages - for some reason this section doesn't work in Azure
 ::IF NOT DEFINED NUGET_EXE (
 ::  echo Missing nuget.exe path, checking for local executable
 ::  IF EXIST "%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe" (
@@ -80,7 +80,6 @@ echo 1: Restore NuGet packages
 ::    goto error
 ::  )
 ::)
-echo 1b: Restore NuGet packages
 
 ::IF /I "CloudPixiesAndGhosts.sln" NEQ "" (
 ::  echo - Nuget Package Restore using Nuget.exe located at: %NUGET_EXE%
