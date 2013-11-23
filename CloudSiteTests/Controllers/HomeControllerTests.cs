@@ -49,5 +49,18 @@ namespace CloudSiteTests.Controllers
             Assert.AreEqual(validInput, ((TextModel)model).Text);
         }
 
+        [Test]
+        public void Text_EmptyInput_DisplaysFormWithError()
+        {
+            var controller = new HomeController();
+            string invalidInput = "";
+
+            var result = controller.Text(invalidInput);
+
+            Assert.IsInstanceOf<ViewResult>(result);
+            var viewResult = (ViewResult) result;
+            Assert.AreEqual("Index", viewResult.ViewName);
+            Assert.IsInstanceOf<String>(viewResult.Model);
+        }
     }
 }
