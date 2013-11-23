@@ -82,11 +82,11 @@ echo 1: Restore NuGet packages
 ::)
 echo 1b: Restore NuGet packages
 
-IF /I "CloudPixiesAndGhosts.sln" NEQ "" (
-  echo - Nuget Package Restore using Nuget.exe located at: %NUGET_EXE%
-  call "%NUGET_EXE%" restore "%DEPLOYMENT_SOURCE%\CloudPixiesAndGhosts.sln"
-  IF !ERRORLEVEL! NEQ 0 goto error
-)
+::IF /I "CloudPixiesAndGhosts.sln" NEQ "" (
+::  echo - Nuget Package Restore using Nuget.exe located at: %NUGET_EXE%
+::  call "%NUGET_EXE%" restore "%DEPLOYMENT_SOURCE%\CloudPixiesAndGhosts.sln"
+::  IF !ERRORLEVEL! NEQ 0 goto error
+::)
 
 :: 2. Build to the temporary path
 echo 2: Build to the temporary path
