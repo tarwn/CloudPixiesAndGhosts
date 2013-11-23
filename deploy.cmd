@@ -53,6 +53,7 @@ IF NOT DEFINED DEPLOYMENT_TEMP (
 )
 
 IF DEFINED CLEAN_LOCAL_DEPLOYMENT_TEMP (
+  echo Creating deployment temp at %DEPLOYMENT_TEMP%
   IF EXIST "%DEPLOYMENT_TEMP%" rd /s /q "%DEPLOYMENT_TEMP%"
   mkdir "%DEPLOYMENT_TEMP%"
 )
@@ -68,13 +69,20 @@ IF NOT DEFINED MSBUILD_PATH (
 echo Handling .NET Web Application deployment.
 
 :: 1. Restore NuGet packages
+IF NOT DEFINED NUGET_EXE (
+  echo Missing nuget.exe path, cannot continue
+  goto error
+)
+
 IF /I "CloudPixiesAndGhosts.sln" NEQ "" (
+  echo - Nuget Package Restore using Nugete.exe located at: %NUGET_EXE%
   call "%NUGET_EXE%" restore "%DEPLOYMENT_SOURCE%\CloudPixiesAndGhosts.sln"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
 :: 2. Build to the temporary path
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
+  echo - Build
   %MSBUILD_PATH% "%DEPLOYMENT_SOURCE%\CloudSite\CloudSite.csproj" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release /p:SolutionDir="%DEPLOYMENT_SOURCE%\.\\" %SCM_BUILD_ARGS%
 ) ELSE (
   %MSBUILD_PATH% "%DEPLOYMENT_SOURCE%\CloudSite\CloudSite.csproj" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release /p:SolutionDir="%DEPLOYMENT_SOURCE%\.\\" %SCM_BUILD_ARGS%
@@ -84,6 +92,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
+  echo - KuduSync 
   call %KUDU_SYNC_CMD% -v 50 -f "%DEPLOYMENT_TEMP%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
