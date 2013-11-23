@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CloudSite.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,12 @@ namespace CloudSite.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult Text(string text)
+        {
+            var model = new TextModel(text);
+            return View(model);
         }
 
     }
