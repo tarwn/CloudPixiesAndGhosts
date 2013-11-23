@@ -17,8 +17,15 @@ namespace CloudSite.Controllers
 
         public ActionResult Text(string text)
         {
-            var model = new TextModel(text);
-            return View(model);
+            if (String.IsNullOrEmpty(text))
+            {
+                return View("Index",(object) "Please enter text to display, showing an empty value is tricky");
+            }
+            else
+            {
+                var model = new TextModel(text);
+                return View(model);
+            }
         }
 
     }
