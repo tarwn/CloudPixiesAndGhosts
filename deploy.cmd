@@ -80,6 +80,7 @@ echo 1: Restore NuGet packages
 ::    goto error
 ::  )
 ::)
+echo 1b: Restore NuGet packages
 
 IF /I "CloudPixiesAndGhosts.sln" NEQ "" (
   echo - Nuget Package Restore using Nuget.exe located at: %NUGET_EXE%
