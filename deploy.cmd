@@ -69,11 +69,12 @@ IF NOT DEFINED MSBUILD_PATH (
 echo Handling .NET Web Application deployment.
 
 :: 1. Restore NuGet packages
-echo - 1: Restore NuGet packages
+echo 1: Restore NuGet packages
 IF NOT DEFINED NUGET_EXE (
+  echo Missing nuget.exe path, checking for local executable
   IF EXIST "%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe" (
      echo Missing nuget.exe path, using local executable from package restore
-	 SET NUGET_EXE=%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe
+	 SET NUGET_EXE="%DEPLOYMENT_SOURCE%\.nuget\NuGet.exe"
   ) ELSE (
     echo Missing nuget.exe path and package restore not set, cannot continue
     goto error
@@ -87,7 +88,7 @@ IF /I "CloudPixiesAndGhosts.sln" NEQ "" (
 )
 
 :: 2. Build to the temporary path
-echo - 2: Build temporary path
+echo 2: Build to the temporary path
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   echo - Build
   %MSBUILD_PATH% "%DEPLOYMENT_SOURCE%\CloudSite\CloudSite.csproj" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release /p:SolutionDir="%DEPLOYMENT_SOURCE%\.\\" %SCM_BUILD_ARGS%
@@ -98,7 +99,7 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. KuduSync
-echo - 3: KuduSync
+echo 3: KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   echo - KuduSync 
   call %KUDU_SYNC_CMD% -v 50 -f "%DEPLOYMENT_TEMP%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
