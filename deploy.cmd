@@ -96,7 +96,7 @@ call "tools/nunit-console.exe" "%DEPLOYMENT_SOURCE%\CloudSiteTests\bin\Debug\Clo
 
 echo 2b: Executing Interface Tests: CloudPixiesTests
 %MSBUILD_PATH% "%DEPLOYMENT_SOURCE%\CloudPixiesTests\CloudPixiesTests.csproj" /nologo /verbosity:m /t:Build /p:Configuration=UITest
-call "tools/nunit-console-x86.exe" "%DEPLOYMENT_SOURCE%\CloudPixiesTests\bin\Debug\CloudPixiesTests.dll"
+call "tools/nunit-console-x86.exe" "%DEPLOYMENT_SOURCE%\CloudPixiesTests\bin\UITest\CloudPixiesTests.dll"
 
 IF !ERRORLEVEL! NEQ 0 goto error
 
