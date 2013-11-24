@@ -20,9 +20,18 @@ namespace CloudPixiesTests
         [TestFixtureSetUp]
         public void SetupWebSite()
         {
-            var siteLocation = Path.GetDirectoryName(Assembly.GetAssembly(typeof(MvcApplication)).Location) + "\\..";
+            var siteLocation = GetUsableSitePath();
             _server = new CassiniDevServer();
             _server.StartServer(siteLocation);
+        }
+
+        private string GetUsableSitePath()
+        {
+            var assemblyPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(MvcApplication)).Location) + "\\..";
+            if (assemblyPath.ToLower().Contains("ncrunch"))
+                return assemblyPath;
+            else
+                return "../../../CloudSite";
         }
 
         [TestFixtureTearDown]

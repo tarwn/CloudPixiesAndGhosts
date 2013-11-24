@@ -90,9 +90,13 @@ echo 1: Skipping Restore NuGet packages - for some reason this section doesn't w
 :: 2. Tests
 echo 2: Build and execute tests
 
-echo 2a: Executing Unit Tests for CloudSiteTests
+echo 2a: Executing Unit Tests: CloudSiteTests
 %MSBUILD_PATH% "%DEPLOYMENT_SOURCE%\CloudSiteTests\CloudSiteTests.csproj" /nologo /verbosity:m /t:Build /p:Configuration=Debug
 call "tools/nunit-console.exe" "%DEPLOYMENT_SOURCE%\CloudSiteTests\bin\Debug\CloudSiteTests.dll"
+
+echo 2b: Executing Interface Tests: CloudPixiesTests
+%MSBUILD_PATH% "%DEPLOYMENT_SOURCE%\CloudPixiesTests\CloudPixiesTests.csproj" /nologo /verbosity:m /t:Build /p:Configuration=UITest
+call "tools/nunit-console-x86.exe" "%DEPLOYMENT_SOURCE%\CloudPixiesTests\bin\Debug\CloudPixiesTests.dll"
 
 IF !ERRORLEVEL! NEQ 0 goto error
 
